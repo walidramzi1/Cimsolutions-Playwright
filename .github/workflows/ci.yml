@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-typecheck-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run typecheck
+
+      - run: npm run bddgen
+
+      # Alleen term-validator.feature draait hier: pure functie-tests zonder page-fixture,
+      # dus zonder afhankelijkheid van de live partnersite of Supabase-secrets. scraper-run en
+      # upsert-terms hebben beide een echte, ingelogde sessie resp. een live Supabase-database
+      # nodig en blijven om die reden lokaal/handmatig; zie README.md ("Tests in CI").
+      - run: npx playwright test term-validator

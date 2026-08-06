@@ -1,0 +1,29 @@
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+storageState.json
+/scraped-output/
+
+# playwright-bdd: gegenereerd uit features/*.feature + features/steps/, niet de bron
+/.features-gen/
+
+# Build output
+dist/
+build/
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

@@ -1,0 +1,33 @@
+{
+  "name": "cimsolutions-playwright",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bddgen": "bddgen",
+    "pretest": "npm run bddgen",
+    "test": "playwright test",
+    "prescrape": "npm run bddgen",
+    "scrape": "playwright test scraper-run",
+    "login:setup": "tsx scripts/login-setup.ts",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.48.0",
+    "@types/node": "^22.0.0",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^9.1.2",
+    "playwright-bdd": "^9.2.0",
+    "prettier": "^3.9.6",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.66.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "dotenv": "^16.4.0"
+  }
+}
