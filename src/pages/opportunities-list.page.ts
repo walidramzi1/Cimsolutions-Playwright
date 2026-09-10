@@ -40,6 +40,10 @@ interface VisibleRow {
 export async function gotoOpportunitiesList(page: Page): Promise<void> {
   await page.goto(OPPORTUNITIES_URL);
   await page.waitForLoadState('networkidle');
+  // networkidle vuurt soms vóórdat de toolbar (en dus "Filters resetten") daadwerkelijk
+  // gerenderd is, vooral direct na een verse (her)authenticatie. Wacht op een concreet element
+  // in plaats van op een vaste timeout te gokken.
+  await page.locator('#ppg-filter-select').waitFor({ state: 'visible' });
 }
 
 // ============================================================================

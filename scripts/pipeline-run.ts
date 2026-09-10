@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { upsertTerms } from '../src/lib/upsert-terms.js';
 import { validateTerms, type FlaggedTerm } from '../src/lib/validate-terms.js';
+import { deleteExpiredTerms } from '../src/lib/cleanup-expired-terms.js';
 import type { ScrapedTerm } from '../src/lib/types.js';
 
 // ============================================================================
@@ -84,9 +85,21 @@ async function main() {
   );
   console.log('[pipeline-run] Geen Monday-publicatie uitgevoerd — dat blijft een expliciete, losse actie.');
 
-  // Stap 5: log een korte samenvatting van de hele run.
+  // Stap 5: verwijder rijen met een verstreken of ontbrekende deadline uit Supabase, zodat de
+  // database alleen aanvragen bevat waarvan de deadline nog niet verstreken is.
+  const deletedTerms = await deleteExpiredTerms(role);
+  if (deletedTerms.length > 0) {
+    console.log(`[pipeline-run] ${deletedTerms.length} rijen met verstreken/ontbrekende deadline verwijderd uit Supabase:`);
+    for (const deletedTerm of deletedTerms) {
+      console.log(`  - "${deletedTerm.term}" (${deletedTerm.source_id}): deadline was "${deletedTerm.deadline}"`);
+    }
+  } else {
+    console.log('[pipeline-run] Geen rijen met verstreken/ontbrekende deadline gevonden om te verwijderen.');
+  }
+
+  // Stap 6: log een korte samenvatting van de hele run.
   console.log(
-    `[pipeline-run] samenvatting: rol="${role}" gescraped=${terms.length} gevalideerd=${validated.length} geflagd=${flagged.length} upserted=${upserted?.length ?? 0}`,
+    `[pipeline-run] samenvatting: rol="${role}" gescraped=${terms.length} gevalideerd=${validated.length} geflagd=${flagged.length} upserted=${upserted?.length ?? 0} verwijderd=${deletedTerms.length}`,
   );
 }
 

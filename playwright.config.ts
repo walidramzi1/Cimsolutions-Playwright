@@ -15,6 +15,9 @@ const testDir = defineBddConfig({
 
 export default defineConfig({
   testDir,
+  // scraper-run doorloopt alle zoektermen van een rol in één teststap (meerdere
+  // paginanavigaties na elkaar), dat duurt inherent langer dan de standaard 30s.
+  timeout: 300_000,
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,

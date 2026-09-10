@@ -64,8 +64,9 @@ function majorityShape(terms: ScrapedTerm[]): string {
 // Helperfunctie: deadline parsen
 // ============================================================================
 
-// Deadline komt van de bronsite als "D-M-YYYY HH:MM" (bijv. "6-8-2026 05:30").
-function parseDeadline(deadline: string): Date | null {
+// Deadline komt van de bronsite als "D-M-YYYY HH:MM" (bijv. "6-8-2026 05:30"). Ook gebruikt
+// door cleanup-expired-terms.ts, zodat "verstreken" overal exact hetzelfde betekent.
+export function parseDeadline(deadline: string): Date | null {
   // Haal dag, maand, jaar, uur en minuut uit de tekst met een reguliere expressie.
   const match = deadline.match(/^(\d{1,2})-(\d{1,2})-(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/);
   if (!match) return null;
